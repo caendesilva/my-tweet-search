@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Tweet Search</title>
+</head>
+<body>
+    <header>
+        <h1>My Tweet Search</h1>
+        <p>
+            Looking for that specific tweet you wrote a while ago?<br>
+            This simple tool provides a nicer wrapper for the Twitter Advanced Search to quickly find it.
+        </p>
+    </header>
+
+    <main>
+        <form id="searchForm" action="https://twitter.com/search" method="GET">
+            <input type="hidden" name="f" value="live"> <!-- live = all tweets, recent = recent tweets - todo make into checkbox -->
+
+            <label for="from">From</label>
+            <input type="text" name="from" id="from" placeholder="Your Twitter handle" required>
+
+            <label for="q">Search for a Tweet</label>
+            <input type="text" name="q" id="q" placeholder="Search for a Tweet" required>
+            <input type="submit" value="Search">
+        </form>
+    </main>
+
+    <footer>
+        Built by Caen, (<a href="https://twitter.com/CodeWithCaen">Twitter</a>, <a href="https://github.com/caendesilva">GitHub</a>) <br>
+
+        <small>
+            The source code is available on <a href="https://github.com/caendesilva/my-tweet-search">GitHub</a>.
+            This tool does not save any of your data, and it has no backend. For your convenience, it uses Local Storage to remember your Twitter handle.
+        </small>
+    </footer>
+
+    <script>
+        // Use Local Storage to remember the user's Twitter handle
+        const from = document.getElementById('from');
+        const fromLocalStorage = localStorage.getItem('from');
+
+        if (fromLocalStorage) {
+            from.value = fromLocalStorage;
+        }
+
+        // Intercept form submit to format the search query
+        document.getElementById('searchForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const from = document.getElementById('from').value;
+            const q = document.getElementById('q').value;
+
+            const query = q + ' (from:' + from + ')';
+
+            localStorage.setItem('from', from);
+
+            window.location.href = 'https://twitter.com/search?f=live&src=typed_query&q=' + encodeURIComponent(query);
+        });
+    </script>
+</body>
+</html>
